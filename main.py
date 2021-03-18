@@ -14,6 +14,7 @@ class User:
         self.area2_total = 0
         self.area3_total = 0
         self.user_info = user_info
+        self.name = "{} {}".format(self.user_info["NOME"], self.user_info["COGNOME"])
         self.parse_info()
 
     def parse_info(self):
@@ -53,6 +54,17 @@ def read_csv(f):
     return rows
 
 
+def write_csv(f, users):
+    with open(f, "w+") as csv_file:
+        writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for user in users:
+            to_write = [user.name]
+            for key, value in user.user_styles_percentage.items():
+                to_write.append(key)
+                to_write.append(value)
+            writer.writerow(to_write)
+
+
 files = ["file.csv"]
 users = []
 for file in files:
@@ -60,5 +72,4 @@ for file in files:
     for row in read:
         users.append(User(row))
 
-# Salvare su Excel
-wb = Workbook()
+write_csv("f.csv", users)
